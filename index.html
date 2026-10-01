@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="RecipeVault - A stylish personal recipe book with categories, search, favorites and local storage.">
+
+    <title>RecipeVault | Smart Recipe Book</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div class="brand">
+        <div class="brand-icon">🍴</div>
+
+        <div>
+            <h1>Recipe<span>Vault</span></h1>
+            <p>Your personal recipe collection</p>
+        </div>
+    </div>
+
+    <div class="header-actions">
+
+        <button class="icon-btn" id="themeBtn" title="Toggle theme">
+            🌙
+        </button>
+
+        <button class="primary-btn" id="addRecipeBtn">
+            <span>＋</span> Add Recipe
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="hero-tag">✨ MY DIGITAL COOKBOOK</span>
+
+        <h2>
+            Turn your favorite recipes
+            <br>
+            into <span>beautiful memories.</span>
+        </h2>
+
+        <p>
+            Organize, discover and manage all your favorite recipes
+            in one beautiful place.
+        </p>
+
+        <button class="hero-btn" id="heroAddBtn">
+            Create Your First Recipe →
+        </button>
+
+    </div>
+
+    <div class="hero-art">
+        <div class="food-circle">
+            🍲
+        </div>
+
+        <div class="floating-card card-one">
+            ❤️ 12 Favorites
+        </div>
+
+        <div class="floating-card card-two">
+            ⭐ Easy Recipes
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ================= STATISTICS ================= -->
+
+<section class="stats">
+
+    <div class="stat-card">
+        <div class="stat-icon">🍽️</div>
+
+        <div>
+            <span>Total Recipes</span>
+            <strong id="totalRecipes">0</strong>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">❤️</div>
+
+        <div>
+            <span>Favorites</span>
+            <strong id="favoriteRecipes">0</strong>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">🏷️</div>
+
+        <div>
+            <span>Categories</span>
+            <strong id="totalCategories">0</strong>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">⏱️</div>
+
+        <div>
+            <span>Avg. Time</span>
+            <strong id="averageTime">0 min</strong>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- ================= TOOLBAR ================= -->
+
+<section class="toolbar">
+
+    <div class="search-box">
+
+        <span>🔎</span>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search recipes, ingredients..."
+        >
+
+    </div>
+
+    <div class="toolbar-buttons">
+
+        <select id="categoryFilter">
+
+            <option value="all">All Categories</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Snacks">Snacks</option>
+            <option value="Drinks">Drinks</option>
+
+        </select>
+
+        <select id="sortFilter">
+
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="az">A → Z</option>
+            <option value="time">Cooking Time</option>
+
+        </select>
+
+        <button class="secondary-btn" id="favoritesBtn">
+            ❤️ Favorites
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= RECIPE AREA ================= -->
+
+<main>
+
+    <div class="section-heading">
+
+        <div>
+            <span class="small-label">MY COLLECTION</span>
+            <h2>My Recipes</h2>
+        </div>
+
+        <span id="recipeCount">0 recipes</span>
+
+    </div>
+
+
+    <div id="recipeGrid" class="recipe-grid"></div>
+
+
+    <!-- EMPTY STATE -->
+
+    <div id="emptyState" class="empty-state hidden">
+
+        <div class="empty-icon">🍳</div>
+
+        <h3>No recipes found</h3>
+
+        <p>
+            Start building your personal cookbook by adding
+            your first delicious recipe.
+        </p>
+
+        <button class="primary-btn" id="emptyAddBtn">
+            ＋ Add Recipe
+        </button>
+
+    </div>
+
+</main>
+
+
+<!-- ================= RECIPE FORM MODAL ================= -->
+
+<div class="modal" id="recipeModal">
+
+    <div class="modal-content">
+
+        <button class="close-btn" id="closeModal">
+            ×
+        </button>
+
+        <div class="modal-header">
+
+            <span class="modal-icon">🍳</span>
+
+            <div>
+                <span class="small-label">RECIPE EDITOR</span>
+
+                <h2 id="modalTitle">
+                    Add New Recipe
+                </h2>
+            </div>
+
+        </div>
+
+
+        <form id="recipeForm">
+
+            <input type="hidden" id="recipeId">
+
+
+            <div class="form-group">
+
+                <label>Recipe Name *</label>
+
+                <input
+                    type="text"
+                    id="recipeName"
+                    placeholder="e.g. Creamy Garlic Pasta"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Category *</label>
+
+                    <select id="recipeCategory" required>
+
+                        <option value="">Select Category</option>
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Lunch">Lunch</option>
+                        <option value="Dinner">Dinner</option>
+                        <option value="Dessert">Dessert</option>
+                        <option value="Snacks">Snacks</option>
+                        <option value="Drinks">Drinks</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Difficulty</label>
+
+                    <select id="recipeDifficulty">
+
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Cooking Time (minutes)</label>
+
+                    <input
+                        type="number"
+                        id="recipeTime"
+                        min="1"
+                        value="30"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Servings</label>
+
+                    <input
+                        type="number"
+                        id="recipeServings"
+                        min="1"
+                        value="2"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Ingredients *</label>
+
+                <textarea
+                    id="recipeIngredients"
+                    placeholder="Enter ingredients separated by commas..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Instructions *</label>
+
+                <textarea
+                    id="recipeInstructions"
+                    rows="5"
+                    placeholder="Write cooking instructions..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Recipe Emoji</label>
+
+                <div class="emoji-options">
+
+                    <button type="button" class="emoji-choice selected">🍝</button>
+                    <button type="button" class="emoji-choice">🍕</button>
+                    <button type="button" class="emoji-choice">🍔</button>
+                    <button type="button" class="emoji-choice">🥗</button>
+                    <button type="button" class="emoji-choice">🍰</button>
+                    <button type="button" class="emoji-choice">🥤</button>
+                    <button type="button" class="emoji-choice">🍳</button>
+
+                </div>
+
+                <input type="hidden" id="recipeEmoji" value="🍝">
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    id="cancelBtn">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary-btn">
+                    Save Recipe
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ================= DETAIL MODAL ================= -->
+
+<div class="modal" id="detailModal">
+
+    <div class="modal-content detail-content">
+
+        <button class="close-btn" id="closeDetail">
+            ×
+        </button>
+
+        <div id="detailBody"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div id="toast" class="toast">
+    <span id="toastIcon">✓</span>
+    <span id="toastMessage">Recipe saved!</span>
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div>
+        <strong>RecipeVault</strong>
+        <span> · Built with HTML, CSS & JavaScript</span>
+    </div>
+
+    <div>
+        💾 Data stored securely in your browser
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
